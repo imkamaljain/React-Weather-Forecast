@@ -1,8 +1,19 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import './index.css';
 import App from './App';
-import reportWebVitals from './reportWebVitals';
+
+export { default as Heading } from './components/Heading';
+export { default as Input } from './components/Input';
+export { default as Weather } from './components/Weather';
+export { default as Footer } from './components/Footer';
+
+export { default as Clear } from './assets/clear.jpg';
+export { default as Thunderstorm } from './assets/thunderstorm.jpg';
+export { default as Drizzle } from './assets/drizzle.jpg';
+export { default as Rain } from './assets/rain.jpg';
+export { default as Snow } from './assets/snow.jpg';
+export { default as Atmosphere } from './assets/atmosphere.jpg';
+export { default as Clouds } from './assets/clouds.jpg';
 
 ReactDOM.render(
   <React.StrictMode>
@@ -10,8 +21,3 @@ ReactDOM.render(
   </React.StrictMode>,
   document.getElementById('root')
 );
-
-// If you want to start measuring performance in your app, pass a function
-// to log results (for example: reportWebVitals(console.log))
-// or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
-reportWebVitals();
