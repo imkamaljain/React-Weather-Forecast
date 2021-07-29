@@ -12,6 +12,11 @@ export default function App() {
   const [weatherData, setWeatherData] = useState({});
   const [error, setError] = useState('');
   const [cities, setCities] = useState([]);
+  const [themeMode, setThemeMode] = useState('light');
+  const [theme, setTheme] = useState({
+    backgroundImage: 'linear-gradient(to top, #5ee7df 0%, #b490ca 100%)',
+    color: '#000'
+  });
 
   useEffect(() => {
     setWeatherData({});;
@@ -61,8 +66,8 @@ export default function App() {
           byHour.push({
             'time': formatUtils.getDisplayTime(response.list[i].dt_txt),
             'temp': Math.round(response.list[i].main.temp),
-            'imgSrc': `http://openweathermap.org/img/wn/${response.list[i].weather[0].icon}@2x.png`,
-            'desc': formatUtils.capitalizeFirstLetters(response.list[i].weather[0].description)
+            'desc': formatUtils.capitalizeFirstLetters(response.list[i].weather[0].description),
+            'weatherType': response.list[i].weather[0].main
           });
         }
         for (let i = 0; i < response.list.length; i++) {
@@ -71,25 +76,35 @@ export default function App() {
           next5Days.push({
             'day': formatUtils.getDay(response.list[i].dt_txt).substr(0, 3),
             'date': formatUtils.getShortDate(response.list[i].dt_txt),
-            'imgSrc': `http://openweathermap.org/img/wn/${response.list[i].weather[0].icon}@2x.png`,
             'desc': formatUtils.capitalizeFirstLetters(response.list[i].weather[0].description),
+            'weatherType': response.list[i].weather[0].main,
             'minTemp': Math.floor(response.list[i].main.temp_min),
             'maxTemp': Math.ceil(response.list[i].main.temp_max),
             'humidity': response.list[i].main.humidity,
             'wind': response.list[i].wind.speed
           });
         }
+        if (typeof param === "string") {
+          param = {
+            'city': formatUtils.capitalizeFirstLetters(param)
+          };
+          const index = cities.findIndex(record => record.Iso2 === response.city.country);
+          if (index !== -1) {
+            param.country = cities[index].country;
+            param.flag = cities[index].flag;
+          }
+        }
         const weatherData = {
           'location': {
-            'city': param.city ?? param,
-            'country': param.country ?? response.city.country,
-            'flag': param.flag ?? '',
+            'city': param.city,
+            'country': param.country,
+            'flag': param.flag,
             'date': formatUtils.getformattedTodayDate()
           },
           'currentTemp': {
             'temp': Math.round(response.list[0].main.temp),
-            'imgSrc': `http://openweathermap.org/img/wn/${response.list[0].weather[0].icon}@2x.png`,
-            'desc': formatUtils.capitalizeFirstLetters(response.list[0].weather[0].description)
+            'desc': formatUtils.capitalizeFirstLetters(response.list[0].weather[0].description),
+            'weatherType': response.list[0].weather[0].main
           },
           'currentStats': {
             'minTemp': Math.floor(response.list[0].main.temp_min),
@@ -113,16 +128,31 @@ export default function App() {
       });
   };
 
+  const changeTheme = (mode) => {
+    setThemeMode(mode);
+    if (mode === 'dark') {
+      setTheme({
+        background: '#000',
+        color: '#fff'
+      });
+    } else {
+      setTheme({
+        backgroundImage: 'linear-gradient(to top, #5ee7df 0%, #b490ca 100%)',
+        color: '#000'
+      });
+    }
+  };
+
   return (
     loading
       ? <Loader />
       : (
-        <div className="container">
+        <div className="container" style={theme}>
           <div className="mainContainer">
-            <Input getWeatherData={getWeatherData} cities={cities} />
+            <Input getWeatherData={getWeatherData} cities={cities} themeMode={themeMode} changeTheme={changeTheme} />
             <Weather weatherData={weatherData} />
           </div>
-          <Footer />
+          <Footer iconColor={theme.color}/>
         </div>)
   );
 }

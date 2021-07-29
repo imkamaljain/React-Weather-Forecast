@@ -10,13 +10,17 @@ export default function Weather({ weatherData }) {
                     <div className="location-and-date">
                         <div>
                             <h1>{`${location.city}, ${location.country}`}</h1>
-                            <img src={location.flag}></img>
+                            {
+                                location.flag
+                                    ? <img src={location.flag}></img>
+                                    : null
+                            }
                         </div>
                         <div>{location.date}</div>
                     </div>
                     <div className="current-temp">
                         <div className="current-temp-icon-container">
-                            <img src={currentTemp.imgSrc} alt=""></img>
+                            <i className={'wi ' + getWeatherTypeIconClass(currentTemp.weatherType)}></i>
                         </div>
                         <div className="current-temp-content-container">
                             <div className="current-temp-value">{currentTemp.temp}&deg;</div>
@@ -26,21 +30,21 @@ export default function Weather({ weatherData }) {
                     <div className="current-stats">
                         <div>
                             <div className="value">{currentStats.minTemp}&deg;</div>
-                            <div className="label">Low</div>
+                            <div className="label">Low <i className="wi wi-direction-down"></i></div>
                             <div className="value">{currentStats.maxTemp}&deg;</div>
-                            <div className="label">High</div>
+                            <div className="label">High <i className="wi wi-direction-up"></i></div>
                         </div>
                         <div>
                             <div className="value">{currentStats.wind}m/s</div>
-                            <div className="label">Wind</div>
+                            <div className="label">Wind <i className="wi wi-windy"></i></div>
                             <div className="value">{currentStats.humidity}%</div>
-                            <div className="label">Humidity</div>
+                            <div className="label">Humidity <i className="wi wi-humidity"></i></div>
                         </div>
                         <div>
                             <div className="value">{currentStats.sunrise}</div>
-                            <div className="label">Sunrise</div>
+                            <div className="label">Sunrise <i className="wi wi-sunrise"></i></div>
                             <div className="value">{currentStats.sunset}</div>
-                            <div className="label">Sunset</div>
+                            <div className="label">Sunset <i className="wi wi-sunset"></i></div>
                         </div>
                     </div>
                     <div className="weather-by-hour">
@@ -50,7 +54,7 @@ export default function Weather({ weatherData }) {
                                 byHour.map((data) => {
                                     return <div className="weather-by-hour-item">
                                         <div>{data.time}</div>
-                                        <img src={data.imgSrc} alt=""></img>
+                                        <i className={'wi ' + getWeatherTypeIconClass(data.weatherType)}></i>
                                         <div>{data.desc}</div>
                                         <div>{data.temp}&deg;</div>
                                     </div>
@@ -68,19 +72,19 @@ export default function Weather({ weatherData }) {
                                             <div className="label">{data.date}</div>
                                         </div>
                                         <div className="value">{data.minTemp}&deg;
-                                            <div className="label">Low</div>
+                                            <div className="label">Low <i className="wi wi-direction-down"></i></div>
                                         </div>
                                         <div className="value">{data.maxTemp}&deg;
-                                            <div className="label">High</div>
+                                            <div className="label">High <i className="wi wi-direction-up"></i></div>
                                         </div>
                                         <div className="value">
-                                            <img src={data.imgSrc} alt={data.desc}></img>
+                                            <i className={'wi ' + getWeatherTypeIconClass(data.weatherType)}></i>
                                         </div>
                                         <div className="value">{data.humidity}%
-                                            <div className="label">Humidity</div>
+                                            <div className="label">Humidity <i className="wi wi-humidity"></i></div>
                                         </div>
                                         <div className="value">{data.wind}m/s
-                                            <div className="label">Wind</div>
+                                            <div className="label">Wind <i className="wi wi-windy"></i></div>
                                         </div>
                                     </div>
                                 })
@@ -91,3 +95,20 @@ export default function Weather({ weatherData }) {
             : null
     )
 }
+
+const getWeatherTypeIconClass = weatherType => {
+    if (weatherType === 'Thunderstorm') return 'wi-thunderstorm';
+    if (weatherType === 'Drizzle') return 'wi-sprinkle';
+    if (weatherType === 'Rain') return 'wi-rain';
+    if (weatherType === 'Snow') return 'wi-snow';
+    if (weatherType === 'Mist') return 'wi-smog';
+    if (weatherType === 'Smoke') return 'wi-smoke';
+    if (weatherType === 'Haze') return 'wi-day-haze';
+    if (weatherType === 'Dust') return 'wi-dust';
+    if (weatherType === 'Fog') return 'wi-fog';
+    if (weatherType === 'Sand') return 'wi-sandstorm';
+    if (weatherType === 'Tornado') return 'wi-tornado';
+    if (weatherType === 'Clear') return 'wi-day-sunny';
+    if (weatherType === 'Clouds') return 'wi-cloudy';
+    return 'wi-na';
+};

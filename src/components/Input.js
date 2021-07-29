@@ -1,9 +1,11 @@
 import React, { useState } from 'react';
 import { BiSearchAlt2 } from 'react-icons/bi';
+import { FaMoon, FaSun } from 'react-icons/fa';
 
-export default function Input({ getWeatherData, cities }) {
+export default function Input({ getWeatherData, cities, themeMode, changeTheme }) {
     const [search, setSearch] = useState('');
     const [filteredCities, setFilteredCities] = useState([]);
+
     const onInput = value => {
         setSearch(value);
         let filteredCitiesData = [];
@@ -16,6 +18,7 @@ export default function Input({ getWeatherData, cities }) {
         setFilteredCities(filteredCitiesData);
     };
     const onCitySelect = value => {
+        if (!value) return;
         setSearch(typeof value == "string" ? value : value.city);  
         setFilteredCities([]); 
         getWeatherData(value);
@@ -25,6 +28,13 @@ export default function Input({ getWeatherData, cities }) {
         <div className="inputContainer">
             <div className="header">
                 <img alt="" onClick={() => window.location.reload()}></img>
+                <div onClick={() => changeTheme(themeMode === 'light' ? 'dark' : 'light')}>
+                    {
+                        themeMode === 'light'
+                            ? <FaMoon />
+                            : <FaSun />
+                    }
+                </div>
             </div>
             <div className="inputWrapper">
                 <div className="searchContainer">
